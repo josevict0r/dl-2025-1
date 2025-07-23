@@ -4,7 +4,7 @@ from sklearn.datasets import make_blobs
 from sklearn.model_selection import train_test_split
 
 class Perceptron:
-    def __init__(self, seed=0, input_size=2, learning_rate=0.01, epochs=100):
+    def __init__(self, seed=0, input_size=2, learning_rate=0.001, epochs=100):
         self.seed = seed
         self.learning_rate = learning_rate
         self.epochs = epochs
