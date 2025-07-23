@@ -13,28 +13,38 @@ class Perceptron:
 
     def _init_weights(self):
         rng = np.random.default_rng(self.seed)
-        ### START CODE HERE ###
-        ### TODO: Initialize weights with small Gaussian noise using rng.normal
-
-        ### END CODE HERE ###
+        # Gaussian noise with mean 0.0 and std 0.01, shape = (n_features + bias, 1)
+        self.weights = rng.normal(0.0, 0.01, (self.input_size + 1, 1))
 
     def activation(self, x):
-        ### START CODE HERE ###
-        ### TODO: Implement the step activation function
-        pass
-        ### END CODE HERE ###
+        # Applies the step function, element-wise
+        return np.where(x >= 0, 1, -1)
 
     def predict(self, X):
-        ### START CODE HERE ###
-        ### TODO: Add a bias term to X, compute dot product with weights, and apply activation
-        pass
-        ### END CODE HERE ###
+        # Ensure X is 2D
+        if X.ndim == 1:
+            X = X.reshape(1, -1)
+
+        # Add bias column if needed
+        if X.shape[1] == self.input_size:
+            X = np.hstack([np.ones((X.shape[0], 1)), X])
+
+        z = np.dot(X, self.weights)  # shape: (n_samples, 1)
+        return self.activation(z).flatten()  # Return shape: (n_samples,)
 
     def fit(self, X, y):
-        ### START CODE HERE ###
-        ### TODO: Implement the perceptron learning rule using weight updates
-        pass
-        ### END CODE HERE ###
+        # Add bias to training data
+        X_with_bias = np.hstack([np.ones((X.shape[0], 1)), X])
+
+        for epoch in range(self.epochs):
+            for i in range(X.shape[0]):
+                x_i = X_with_bias[i, :].reshape(1, -1)  # shape (1, n_features+1)
+                y_hat = self.predict(x_i)[0]  # scalar prediction
+                error = y[i] - y_hat
+                self.weights += self.learning_rate * error * x_i.T  # update rule
+
+            print(f'treinando... epoca {epoch}')
+
 
 def generate_data(seed=0, samples=200, noise=1.5):
     """
