@@ -37,7 +37,7 @@ class Perceptron:
                 x = X_with_bias[i,:].reshape(1,-1)
                 y_chapeu = self.predict(x)[0]
                 self.weights += self.learning_rate * (y[i]-y_chapeu) * x.T
-            print(f'epoca {epoca}')
+            #print(f'epoca {epoca}')
 
 #%%
 def generate_halfmoon(seed = 0,

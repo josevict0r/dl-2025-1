@@ -38,7 +38,7 @@ class Perceptron:
                 x = X_with_bias[j, :].reshape(1, -1)
                 y_chapeu = self.predict(x)[0]
                 self.weights = self.weights + self.learning_rate * (y[j] - y_chapeu) * x.T
-            print(f'treinando... epoca {epoca}')
+            #print(f'treinando... epoca {epoca}')
 
 def generate_data(seed=0, samples=200, noise=1.5):
     """
