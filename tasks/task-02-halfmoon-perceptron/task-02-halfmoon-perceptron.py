@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 
 #%%
 class Perceptron:
-    def __init__(self, seed=0, input_size=2, learning_rate=0.01, epochs=100):
+    def __init__(self, seed=0, input_size=2, learning_rate=0.001, epochs=100):
         self.seed = seed
         self.learning_rate = learning_rate
         self.epochs = epochs
@@ -15,28 +15,29 @@ class Perceptron:
 
     def _init_weights(self):
         rng = np.random.default_rng(self.seed)
-        ### START CODE HERE ###
-        ### TODO: Initialize weights with small Gaussian noise using rng.normal
-        pass
-        ### END CODE HERE ###
+        ### Initialize weights with small Gaussian noise using rng.normal
+        self.weights = rng.normal(0.0, 0.01, (self.input_size+1,1))
 
     def activation(self, x):
-        ### START CODE HERE ###
-        ### TODO: Implement the step activation function
-        pass
-        ### END CODE HERE ###
+        ### Implement the step activation function
+        return np.where(x >= 0, 1, -1)
 
     def predict(self, X):
-        ### START CODE HERE ###
-        ### TODO: Add bias term, compute dot product with weights, apply activation
-        pass
-        ### END CODE HERE ###
+        ### Add bias term, compute dot product with weights, apply activation
+        if X.shape[1] == self.input_size:  # bias not included yet
+            X = np.hstack([np.ones((X.shape[0], 1)), X])
+        z = np.dot(X, self.weights)
+        return self.activation(z).flatten()
 
     def fit(self, X, y):
-        ### START CODE HERE ###
-        ### TODO: Implement the perceptron learning algorithm
-        pass
-        ### END CODE HERE ###
+        ### Implement the perceptron learning algorithm
+        X_with_bias = np.hstack([np.ones((X.shape[0], 1)), X])
+        for epoca in range(self.epochs):
+            for i in range(X.shape[0]):#1000
+                x = X_with_bias[i,:].reshape(1,-1)
+                y_chapeu = self.predict(x)[0]
+                self.weights += self.learning_rate * (y[i]-y_chapeu) * x.T
+            print(f'epoca {epoca}')
 
 #%%
 def generate_halfmoon(seed = 0,

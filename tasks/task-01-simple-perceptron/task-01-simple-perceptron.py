@@ -13,17 +13,15 @@ class Perceptron:
 
     def _init_weights(self):
         rng = np.random.default_rng(self.seed)
-        ### START CODE HERE ###
-        ### TODO: Initialize weights with small Gaussian noise using rng.normal
+        ### Initialize weights with small Gaussian noise using rng.normal
         self.weights = rng.normal(0.0, 0.01, (self.input_size+1,1))
-        ### END CODE HERE ###
+        
 
     def activation(self, x):
         return np.where(x >= 0, 1, -1)
 
     def predict(self, X):
-        ### START CODE HERE ###
-        ### TODO: Add a bias term to X, compute dot product with weights, and apply activation
+        ### Add a bias term to X, compute dot product with weights, and apply activation
         if X.ndim == 1:
             X = X.reshape(1, -1)  # reshape single sample
         if X.shape[1] == self.input_size:  # bias not included yet
