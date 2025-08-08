@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import make_blobs
 
 class LogisticNeuron:
-    def __init__(self, input_dim, learning_rate=0.1, epochs=1000):
+    def __init__(self, input_dim, learning_rate=0.0019, epochs=1000):
         self.weights = np.random.randn(input_dim)
         self.bias = np.random.randn()
         self.learning_rate = learning_rate
@@ -11,45 +11,39 @@ class LogisticNeuron:
         self.loss_history = []
     
     def sigmoid(self, z):
-
-        ### START CODE HERE ###
-        ### TODO
-        s = None
-        ### END CODE HERE ###
+        s = 1/(1+np.exp(-z))
         return s
     
     def predict_proba(self, X):
-        ### START CODE HERE ###
-        ### TODO
-        a = None
-        ### END CODE HERE ###
+        a = self.sigmoid(X @ self.weights + self.bias)
         return a
     
     def predict(self, X):
-        prediction = None
+        prediction = self.predict_proba(X)
         return prediction
     
     def train(self, X, y):
         for _ in range(self.epochs):
             ### START CODE HERE ###
             ### TODO: Implement forward pass
-            y_pred = None
+            y_pred = self.predict(X)
+            #print(y_pred.shape)
+            #y_pred = y_pred[:, 1]
 
             ### TODO: Compute error
-            error = None
+            error = -np.mean(y * np.log(y_pred+1e-8) + (1-y) * np.log(1-y_pred+1e-8))
 
             ### TODO: Compute gradients
-            grad_w = None
-            grad_b = None
+            grad_w = (X.T @ (y_pred-y)/ X.shape[0])
+            grad_b = np.mean(y_pred-y)
 
             ### TODO: Update weights and bias
-            self.weights = None
-            self.bias = None
+            self.weights -= self.learning_rate * grad_w
+            self.bias -= self.learning_rate * grad_b
 
             ### TODO: Compute loss and append to loss_history
-            loss = None
+            loss = error
             self.loss_history.append(loss)
-            ### END CODE HERE ###
 
 def generate_dataset():
     X, y = make_blobs(n_samples=200, centers=2, random_state=42, cluster_std=2.0)
@@ -64,6 +58,7 @@ def plot_decision_boundary(model, X, y):
     Z = Z.reshape(xx.shape)
     
     plt.contourf(xx, yy, Z, levels=20, cmap='coolwarm', alpha=0.7)
+    #plt.contour(xx, yy, Z, levels=[0.5], colors='black')
     plt.colorbar(label='Logistic Regression Output')
     plt.scatter(X[:, 0], X[:, 1], c=y, cmap='bwr', edgecolors='k')
     plt.title('Logistic Regression Decision Boundary')
