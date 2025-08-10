@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import make_blobs
 
 class LogisticNeuron:
-    def __init__(self, input_dim, learning_rate=0.0019, epochs=1000):
+    def __init__(self, input_dim, learning_rate=0.1, epochs=1000):
         self.weights = np.random.randn(input_dim)
         self.bias = np.random.randn()
         self.learning_rate = learning_rate
@@ -24,24 +24,23 @@ class LogisticNeuron:
     
     def train(self, X, y):
         for _ in range(self.epochs):
-            ### START CODE HERE ###
-            ### TODO: Implement forward pass
+            ### Implement forward pass
             y_pred = self.predict(X)
             #print(y_pred.shape)
             #y_pred = y_pred[:, 1]
 
-            ### TODO: Compute error
+            ### Compute error
             error = -np.mean(y * np.log(y_pred+1e-8) + (1-y) * np.log(1-y_pred+1e-8))
 
-            ### TODO: Compute gradients
+            ### Compute gradients
             grad_w = (X.T @ (y_pred-y)/ X.shape[0])
             grad_b = np.mean(y_pred-y)
 
-            ### TODO: Update weights and bias
+            ### Update weights and bias
             self.weights -= self.learning_rate * grad_w
             self.bias -= self.learning_rate * grad_b
 
-            ### TODO: Compute loss and append to loss_history
+            ### Compute loss and append to loss_history
             loss = error
             self.loss_history.append(loss)
 
